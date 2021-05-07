@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>
+        Hola Paola
+    </h2>
+    <neo-input></neo-input>
+    <neoris-input-nro-text></neoris-input-nro-text>
+
+    <script>
+        const inputNroText = document.createElement('template');
+
+        inputNroText.innerHTML = `
+      <div style="margin: 5px 0; border: solid 1px grey; padding: 15px">
+        <input placeholder="ingrese numeros" style="margin: 0px 0">
+        <div id="texts"></div>
+      </div>
+    `;
+   
+        class NeorisNroText extends HTMLElement {
+
+            constructor() {
+                super();
+
+                this._shadowRoot = this.attachShadow({ mode: 'open' });
+                this._shadowRoot.appendChild(inputNroText.content.cloneNode(true));
+                this.input = this._shadowRoot.querySelector('input');
+                this.div = this._shadowRoot.querySelector("#texts");
+
+                this.input.addEventListener('input', () => {
+                    var parrafo = document.createElement("p");
+                    console.log(this.input.value.slice(-1));
+                    switch (this.input.value.slice(-1)) {
+                        case '1':
+                            parrafo.innerHTML = 'uno';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '1':
+                            parrafo.innerHTML = 'uno';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '1':
+                            parrafo.innerHTML = 'uno';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '2':
+                            parrafo.innerHTML = 'dos';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '3':
+                            parrafo.innerHTML = 'tres';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '4':
+                            parrafo.innerHTML = 'cuatro';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '5':
+                            parrafo.innerHTML = 'cinco';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '6':
+                            parrafo.innerHTML = 'seis';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '7':
+                            parrafo.innerHTML = 'siete';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '8':
+                            parrafo.innerHTML = 'ocho';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '9':
+                            parrafo.innerHTML = 'nueve';
+                            this.div.appendChild(parrafo);
+                            break;
+                        case '0':
+                            parrafo.innerHTML = 'cero';
+                            this.div.appendChild(parrafo);
+                            break;
+                    }
+                });
+            }
+        }
+        window.customElements.define('neoris-input-nro-text', NeorisNroText);
+    </script>
+</body>
+
+</html>

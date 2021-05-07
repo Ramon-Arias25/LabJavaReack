@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+
+  <neoris-input-pass-pipe></neoris-input-pass-pipe>
+  <neoris-input-max-10></neoris-input-max-10>
+  <neoris-input-nro-text></neoris-input-nro-text>
+
+  <script>
+    var longitudMaxima = 10;
+    const inputPipe = document.createElement('template');
+    const inputMax10 = document.createElement('template');
+    const inputNroText = document.createElement('template');
+
+    inputPipe.innerHTML = `
+      <div style="margin: 5px 0; border: solid 1px grey; padding: 15px">        
+        <input placeholder="ingrese su password" class="input-pipe" >
+        <p id="text"></p>
+      </div>
+    `;
+
+    inputMax10.innerHTML = `
+      <div style="margin: 5px 0; border: solid 1px grey; padding: 15px">
+        <div>longitud-máxima</div>
+        <div style="display: flex; margin: 10px 0">
+          <button class="buttonMas" style="min-width: 30px;">+</button>
+          <div id="longitud-máxima"> 10 </div>
+          <button class="buttonMenos" style="min-width: 30px;">-</button>
+        </div>
+        <!-- <input placeholder="ingrese caracteres" style="margin: 0px 0" maxlength="10">-->
+        <input placeholder="ingrese caracteres" style="margin: 0px 0" longitud-máxima="10">
+      </div>
+    `;
+
+    inputNroText.innerHTML = `
+      <div style="margin: 5px 0; border: solid 1px grey; padding: 15px">
+        <input placeholder="ingrese numeros" style="margin: 0px 0">
+        <div id="texts"></div>
+      </div>
+    `;
+
+
+    class NeorisPassPipe extends HTMLElement {
+      constructor() {
+        super();
+
+        this._shadowRoot = this.attachShadow({ mode: 'open' });
+        this._shadowRoot.appendChild(inputPipe.content.cloneNode(true));
+        this.input = this._shadowRoot.querySelector('input');
+        this.text = this._shadowRoot.querySelector("#text");
+        this.input.addEventListener('keydown', (event) => {
+          if (event.code == "Backspace"){
+            this.input.value= null;
+            this.text.innerHTML = null;
+          }
+        });
+        this.input.addEventListener('input', () => {
+          this.text.innerHTML = this.text.innerHTML + this.input.value.slice(-1);
+          let pipes = "";
+          for (var i = 1; i <= this.input.value.length; i++) {
+            pipes = pipes + "|";
+          }
+          this.input.value = pipes;
+        });
+      }
+    }
+    class NeorisMax10 extends HTMLElement {
+
+      constructor() {
+        super();
+
+        this._shadowRoot = this.attachShadow({ mode: 'open' });
+        this._shadowRoot.appendChild(inputMax10.content.cloneNode(true));
+        this.input = this._shadowRoot.querySelector('input');
+        this.buttonMas = this._shadowRoot.querySelector(".buttonMas");
+        this.buttonMenos = this._shadowRoot.querySelector(".buttonMenos");
+        this.div = this._shadowRoot.querySelector("#longitud-máxima");
+        this.buttonMas.addEventListener('click', () => {
+          this.div.innerHTML = ++longitudMaxima;
+          this.input.setAttribute('longitud-máxima', longitudMaxima);
+        });
+        this.buttonMenos.addEventListener('click', () => {
+          this.div.innerHTML = --longitudMaxima;
+          this.input.setAttribute('longitud-máxima', longitudMaxima);
+          if (this.input.value.length > longitudMaxima) {
+            alert("La longitud-máxima del campo es menor al numero de caracteres ingresados, El campo se limpiara");
+            this.input.value = "";
+          }
+        });
+        this.input.addEventListener('input', (event) => {
+          if (this.input.value.length > longitudMaxima) {
+            alert("Ha ingresado una cantidad mayor de caracteres a la cantidad permitida por la longitud-máxima, El campo se limpiara");
+            this.input.value = "";
+          }
+        });
+      }
+    }
+
+    class NeorisNroText extends HTMLElement {
+
+      constructor() {
+        super();
+
+        this._shadowRoot = this.attachShadow({ mode: 'open' });
+        this._shadowRoot.appendChild(inputNroText.content.cloneNode(true));
+        this.input = this._shadowRoot.querySelector('input');
+        this.div = this._shadowRoot.querySelector("#texts");
+        this.input.addEventListener('input', () => {
+          let p = document.createElement("p");
+          let nro = this.input.value.slice(-1);
+          p.innerHTML = nroToText(nro);
+          this.div.appendChild(p);
+        });
+      }
+    }
+
+    function nroToText(nro) {
+      switch (nro) {
+        case '1':
+          return 'uno';
+          break;
+        case '2':
+          return 'dos';
+          break;
+        case '3':
+          return 'tres';
+          break;
+        case '4':
+          return 'cuatro';
+          break;
+        case '5':
+          return 'cinco';
+          break;
+        case '6':
+          return 'seis';
+          break;
+        case '7':
+          return 'siete';
+          break;
+        case '8':
+          return 'ocho';
+          break;
+        case '9':
+          return 'nueve';
+          break;
+        case '0':
+          return 'cero';
+          break;
+        default:
+          return 'NO ES NUMERO';
+          break;
+      }
+    }
+
+    window.customElements.define('neoris-input-pass-pipe', NeorisPassPipe);
+    window.customElements.define('neoris-input-max-10', NeorisMax10);
+    window.customElements.define('neoris-input-nro-text', NeorisNroText);
+  </script>
+
+</body>
+
+</html>
